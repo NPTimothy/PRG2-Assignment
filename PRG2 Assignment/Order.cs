@@ -82,7 +82,16 @@ Premium ($+2 per scoop)
 _______________________________________
 Enter option numbers (Max. 3 scoops).");
             List<Flavour> flavours = new();
-            List<Flavour> availableFlavours = new(new Flavour("Vanilla", false, 1), new Flavour("Chocolate", false, 1), new Flavour("Strawberry", false, 1), new Flavour("Durian", true, 1), new Flavour("Ube", true, 1), new Flavour("Sea Salt", true, 1));
+            List<Flavour> availableFlavours = new()
+            {
+                new Flavour("Vanilla", false, 1),
+                new Flavour("Chocolate", false, 1),
+                new Flavour("Strawberry", false, 1),
+                new Flavour("Durian", true, 1),
+                new Flavour("Ube", true, 1),
+                new Flavour("Sea Salt", true, 1)
+            };
+
             for (int i = 1; i < 4; i++)
             {
                 int flavour = -1;
