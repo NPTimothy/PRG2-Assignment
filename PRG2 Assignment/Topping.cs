@@ -19,7 +19,7 @@ namespace PRG2_Assignment
 
         public override string ToString()
         {
-            return ""
+            return "";
         }
     }
 }
