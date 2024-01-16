@@ -20,17 +20,17 @@ namespace PRG2_Assignment
             double price;
             if (Scoops == 1)
             {
-                price = 4;
+                price = 7;
 
             }
             else if (Scoops == 2)
             {
-                price = 5.50;
+                price = 8.50;
 
             }
             else if (Scoops == 3)
             {
-                price = 6.50;
+                price = 9.50;
             }
             else
             {
