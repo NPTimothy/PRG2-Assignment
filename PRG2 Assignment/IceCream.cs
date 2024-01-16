@@ -12,7 +12,9 @@ namespace PRG2_Assignment
         public int Scoops { get; set; }
         public List<Flavour> Flavours { get; set; }
         public List<Topping> Toppings { get; set; }
+
         public IceCream() { }
+
         public IceCream(string o, int s, List<Flavour> f, List<Topping> t)
         {
             Option = o;
@@ -22,6 +24,7 @@ namespace PRG2_Assignment
         }
 
         public abstract double CalculatePrice();
+
         public override string ToString()
         {
             return "";

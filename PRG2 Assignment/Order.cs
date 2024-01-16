@@ -17,7 +17,7 @@ namespace PRG2_Assignment
 
         public Order() { }
 
-        public Order(int i,DateTime t)
+        public Order(int i, DateTime t)
         {
             ID = i;
             TimeReceived = t;
@@ -200,9 +200,10 @@ ___________________");
             {
                 Console.WriteLine(@"Choose waffle flavour:
 ------------------------
-[1] Red velvet
-[2] Charcoal
-[3] Pandan
+[1] Plain
+[2] Red velvet
+[3] Charcoal
+[4] Pandan
 ________________________");
 
                 // Validation
@@ -218,10 +219,11 @@ ________________________");
                             throw new FormatException();
                         }
 
-                        if (waffleFlavour == 1) IceCreamList[index] = new Waffle("Waffle", scoops, flavours, toppings, "Red velvet");
-                        else if (waffleFlavour == 2) IceCreamList[index] = new Waffle("Waffle", scoops, flavours, toppings, "Charcoal");
-                        else if (waffleFlavour == 3) IceCreamList[index] = new Waffle("Waffle", scoops, flavours, toppings, "Pandan");
-                        else if (waffleFlavour == 0) break;
+                        if (waffleFlavour == 1) IceCreamList[index] = new Waffle("Waffle", scoops, flavours, toppings, "Plain");
+                        else if (waffleFlavour == 2) IceCreamList[index] = new Waffle("Waffle", scoops, flavours, toppings, "Red velvet");
+                        else if (waffleFlavour == 3) IceCreamList[index] = new Waffle("Waffle", scoops, flavours, toppings, "Charcoal");
+                        else if (waffleFlavour == 4) IceCreamList[index] = new Waffle("Waffle", scoops, flavours, toppings, "Pandan");
+                        break;
                     }
                     catch
                     {
