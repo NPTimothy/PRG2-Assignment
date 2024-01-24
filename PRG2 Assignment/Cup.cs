@@ -11,6 +11,12 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
+//==========================================================
+// Student Number : S10262528
+// Student Name : Joseph Wan
+// Partner Name : Timothy Chai
+//==========================================================
+
 namespace PRG2_Assignment
 {
     internal class Cup:IceCream
@@ -38,6 +44,21 @@ namespace PRG2_Assignment
             {
                 Console.WriteLine("You can only scoop a maximum of 3 scoops.");
                 return 0;
+            }
+
+            bool hasPremiumFlavour = false;
+            foreach (var flavour in Flavours)
+            {
+                if (flavour.Premium)
+                {
+                    hasPremiumFlavour = true;
+                    break;
+                }
+            }
+
+            if (hasPremiumFlavour)
+            {
+                price += 2 * Scoops;
             }
             
             if (Toppings.Count > 0)
