@@ -4,6 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//==========================================================
+// Student Number : S10262528
+// Student Name : Joseph Wan
+// Partner Name : Timothy Chai
+//==========================================================
+
 namespace PRG2_Assignment
 {
     internal abstract class IceCream
