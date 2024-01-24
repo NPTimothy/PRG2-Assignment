@@ -1,4 +1,10 @@
-﻿using System;
+﻿//==========================================================
+// Student Number : S10256132
+// Student Name : Timothy Chai
+// Partner Name : Joseph Wan
+//==========================================================
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;

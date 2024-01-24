@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+//==========================================================
+// Student Number : S10262528
+// Student Name : Joseph Wan
+// Partner Name : Timothy Chai
+//==========================================================
+
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,7 +33,7 @@ namespace PRG2_Assignment
 
         public override string ToString()
         {
-            return "";
+            return "Option: " + Option + " Scoops: " + Scoops + " Flavours: " + Flavours + " Toppings: " + Toppings;
         }
     }
 }
