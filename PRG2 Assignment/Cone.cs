@@ -77,9 +77,18 @@ namespace PRG2_Assignment
         }
         public override string ToString()
         {
-            return "";
-        }
+            string flavours = "";
+            foreach (var flavour in Flavours)
+            {
+                flavours += flavour.ToString();
+            }
 
-        
-    }
+            string toppings = "";
+            foreach (var topping in Toppings)
+            {
+                toppings += topping.ToString();
+            }
+            return "Option: " + Option + "|" + " Scoops: " + Scoops + "|" + " Flavours: " + flavours + "|" + " Toppings: " + toppings + "|" + " Dipped: " + Dipped;
+        }
+    } 
 }
