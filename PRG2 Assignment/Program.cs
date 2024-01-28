@@ -1,6 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using PRG2_Assignment;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 
 
 // Initialisation
@@ -8,7 +11,7 @@ Queue<Order> regularQueue = new();
 Queue<Order> goldQueue = new();
 
 Dictionary<int, Customer> customerDict = new();
-
+InitializeCustomerDict();
 
 
 List<List<string>> flavourList = new();
@@ -87,9 +90,9 @@ void ListAllCustomers()
         int memberID = Convert.ToInt32(data[1]); //The Member ID would be the second field
         DateTime dob = Convert.ToDateTime(data[2]); //The date of birth would be the third field
         string? membershipStatus = data[3]; //The Membership Status would be the fourth field
-        //int? membershipPoints = Convert.ToInt32(data[4]); //The Membership Points would be the fifth field
-        //int? punchCard = Convert.ToInt32(data[5]); //The PunchCard would be the sixth field
-        Console.WriteLine("{0, -10} {1, -10} {2, -15} {3, -16} {4, -16} {5, -15}", data[0], data[1], data[2], data[3], data[4], data[5]); //Displaying the contents of the csv file below their respective headers.
+        int membershipPoints = Convert.ToInt32(data[4]); //The Membership Points would be the fifth field
+        int punchCard = Convert.ToInt32(data[5]); //The PunchCard would be the sixth field
+        Console.WriteLine("{0, -10} {1, -10} {2, -15} {3, -16} {4, -16} {5, -15}", name, memberID, dob.ToString("dd/MM/yyyy"), membershipStatus, membershipPoints, punchCard); //Displaying the contents of the csv file below their respective headers.
     }
 }
 
@@ -142,15 +145,220 @@ void RegisterNewCustomer() //RegisterNewCustomer method
         PointCard pointCard = new PointCard();//Instantiated a Pointcard object
         newCustomer.Rewards = pointCard; //Assigned Pointcard object to customer
 
-        string newCustomerLine = string.Format("\n{0},{1},{2},{3},{4},{5}", newCustomer.Name, newCustomer.MemberID, newCustomer.DOB.ToString("dd/MM/yyyy"), "Ordinary", "0", "0"); //Formatting the string of what will be appended to the csv file.
+        string newCustomerLine = string.Format("\n{0},{1},{2},{3},{4},{5}", newCustomer.Name, newCustomer.MemberID, newCustomer.DOB.ToString("dd/MM/yyyy"), "Ordinary", 0, 0); //Formatting the string of what will be appended to the csv file.
 
         customerDict.Add(memberID, newCustomer); //Add a new customer to customerDict once new customer registered.
 
         File.AppendAllLines("customers.csv", new[] { newCustomerLine }); //Appending the newly registered customer to the csv file
+
+        Console.WriteLine("New customer successfully registered.");
     }
     catch
     {
         Console.WriteLine("The input format is incorrect. Do enter the Customer ID/DOB of Customer correctly."); //Should there be any issues regarding the format of what the user input for the member ID & DOB prompts, this message will show up.
+    }
+}
+
+// Feature 4
+void CreateCustomerOrder() //Create Customer Order Feature
+{
+    ListAllCustomers(); //Call List All Customers method
+    int id; //Initialise integer id
+    List<Flavour> selectedFlavourList = new List<Flavour>(); //Initialised list of the selected flavour for values to be stored in it when user inputs.
+    List<Topping> selectedToppingList = new List<Topping>(); //Initialised list of the selected topping for values to be stored in it when user inputs.
+    try
+    {
+        Console.Write("Enter Customer ID: "); //Prompt user for the customer ID
+        id = Convert.ToInt32(Console.ReadLine());
+
+        if (!customerDict.ContainsKey(id)) //In the case where the customer ID could not be found in the dictionary, the program tells the user to select a valid Customer ID
+        {
+            Console.WriteLine("Invalid Customer ID: ID must be a whole number from the above list.");
+            return;
+        }
+
+        Customer selectedCustomer = customerDict[id]; //Instantiated customer object and assigned it to customerDict[id]
+
+        Order newOrder = new Order(id, DateTime.Now); //Instantiated newOrder where the new order contains the member ID and the current time and date
+       
+        newOrder.IceCreamList = new List<IceCream>(); //Initialise the IceCreamList from Order object
+
+        while (true)
+        {
+            bool optionFound = false; //Set a boolean to check if the option can be found in the csv file
+            Console.Write("Enter your ice cream option: "); //Prompt user for their ice cream option
+            string option = Console.ReadLine(); 
+            foreach (List<string> options in optionList)
+            {
+                if (options.Contains(option)) //If the option contains an option in the csv file, optionFound will be set to True
+                {
+                    optionFound = true;
+                    break;
+                }
+            }
+
+            if (!optionFound) //If not, well, the user will be prompted to try again.
+            {
+                Console.WriteLine("Invalid option. Please try again.");
+                continue;
+            }
+
+            Console.Write("Enter number of scoops: "); //Prompt user to input the number of scoops
+            int scoops = Convert.ToInt32(Console.ReadLine());
+
+            if (scoops < 1 || scoops > 3)
+            {
+                Console.WriteLine("Invalid number of scoops. Please choose within a range of 1 to 3 scoops."); //Should the number of scoops less than 1 or more than 3, user will be prompted to enter number of scoops again.
+                continue;
+            }
+
+            while (true)
+            {
+                Console.Write("Enter flavour(s) (separate with comma): "); //Prompts user to enter flavours
+                string flavoursInput = Console.ReadLine();
+
+                if (flavoursInput == "") //If the input is empty, the program tells the user to input a flavour.
+                {
+                    Console.WriteLine("Please input a flavour.");
+                    continue;
+                }
+                else
+                {
+                    string[] flavourTokens = flavoursInput.Split(',');
+                    foreach (string flavourToken in flavourTokens)
+                    {
+                        Flavour selectedFlavour = null; //Instantiated flavour object 
+                        foreach (List<string> flavour in flavourList)
+                        {
+                            if (flavour.Contains(flavourToken)) //If there's a valid flavour found in the csv file after the user has input their flavour, the selectedFlavour will be assigned to a new flavour creation.
+                            {
+                                selectedFlavour = new Flavour(flavour[0], Convert.ToInt32(flavour[1]) == 2, 1);
+                                break;
+                            }
+                        }
+                        if (selectedFlavour != null) //If selectedFlavour isn't null, the selected flavour(s) will be added to the list
+                        {
+                            selectedFlavourList.Add(selectedFlavour);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Flavour {0} not found.", flavourToken); //In the case where the flavour the user input in is not found, the program will prompt the user to input their flavour again.
+                            break;
+                        }
+                    }
+                    if (selectedFlavourList.Count >= flavourTokens.Length) //Ensures that the number of selected flavours matches the number of flavour tokens entered by user.
+                    {
+                        break;
+                    }
+                }   
+            }
+            
+            while (true)
+            {
+                Console.Write("Enter topping(s) (separate with comma): "); //Prompt user to enter their toppings
+                string toppingsInput = Console.ReadLine();
+
+                if (toppingsInput == "") //If the toppings input is empty, the program will prompt the user to input a topping.
+                {
+                    Console.WriteLine("Please input a topping.");
+                    continue;
+                }
+                else
+                {
+                    string[] toppingTokens = toppingsInput.Split(',');
+                    foreach (string toppingToken in toppingTokens)
+                    {
+                        Topping selectedTopping = null; //Instantiated topping object
+                        foreach (List<string> topping in toppingList)
+                        {
+                            if (topping.Contains(toppingToken)) //If there's a valid topping found in the csv file after the user has input their topping, the selected Topping will be assigned to a new topping creation.
+                            {
+                                selectedTopping = new Topping(topping[0]);
+                                break;
+                            }
+                        }
+                        if (selectedTopping != null) //If selectedTopping isn't null, the selected Topping will be added to the list of selected toppings.
+                        {
+                            selectedToppingList.Add(selectedTopping);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Topping {0} not found.", toppingToken); //In the case where a topping cannot be found due to user inputting an invalid topping, user will be prompted to enter a valid topping.
+                            break;
+                        }
+                    }
+                    if (selectedToppingList.Count >= toppingTokens.Length) //Ensures that the number of selected toppings matches the number of topping tokens entered by user.
+                    {
+                        break;
+                    }
+                }
+            }
+
+            IceCream iceCream; //Initialised and instantiated icecream object.
+
+            if (option.ToLower() == "cup") //When the option is "cup"
+            {
+                iceCream = new Cup(option, scoops, selectedFlavourList, selectedToppingList); //Create new ice cream based on option "Cup"
+            }
+            else if (option.ToLower() == "cone")//When the option is "cone"
+            {
+                Console.Write("Want it dipped? (Y/N): ");//Prompts the user if they want their cone dipped
+                string dippedInput = Console.ReadLine();
+                bool dipped = dippedInput == "Y"; //Dipped is set to true if user inputs 'Y'
+                iceCream = new Cone(option, scoops, selectedFlavourList, selectedToppingList, dipped); //Create new ice cream based on option "Cone"
+            } 
+            else if (option.ToLower() == "waffle")//When the option is "waffle"
+            {
+                bool wfFound = false;//Initialise the wfFound boolean
+                Console.Write("Enter waffle flavour: ");//Prompts user for their waffle flavour.
+                string waffleFlavour = Console.ReadLine();
+                foreach (List<string> waffleFlavours in optionList)
+                {
+                    if (waffleFlavours.Contains(waffleFlavour)) //Checks the options.csv file if there's a valid waffle flavour and if not, the program will prompt user to try again.
+                    {
+                        wfFound = true;
+                        break;
+                    }
+                }
+
+                if (!wfFound)
+                {
+                    Console.WriteLine("Invalid waffle flavour. Please try again.");
+                    continue;
+                }
+                iceCream = new Waffle(option, scoops, selectedFlavourList, selectedToppingList, waffleFlavour); //Create new ice cream based on option "Waffle"
+            }
+            else
+            {
+                Console.WriteLine("Invalid option. Please try again.");
+                continue;
+            }
+
+            newOrder.AddIceCream(iceCream); //Add Ice Cream to the new order
+
+            Console.Write("Would you like to add another ice cream to the order? (Y/N) "); //Prompts user if they'd like to add another ice cream to the order
+            string response = Console.ReadLine();
+            if (response != null && response.ToUpper() != "Y") //If user doesn't input 'Y', the program stops looping the while loop
+            {
+                break;
+            }
+        }
+
+        selectedCustomer.CurrentOrder = newOrder; //Linking the new order to the customer's current order
+
+        if (selectedCustomer.Rewards != null && selectedCustomer.Rewards.Tier == "Gold") //If customer has a gold-tier Pointcard append their order to the back of the gold queue
+        {
+            goldQueue.Enqueue(newOrder);
+        }
+        else
+        {
+            regularQueue.Enqueue(newOrder); //Otherwise append to the back of the regular queue
+        }
+        Console.WriteLine("Order has been made successfully.");//Display message that order has been made successfully.
+    }
+    catch
+    {
+        Console.WriteLine("Invalid input. Please type in the right input.");//If there's an invalid input, particularly format-wise, this message will be displayed.
     }
 }
 
@@ -231,7 +439,7 @@ while (true) //Starting off the program with a while loop
         else if (option == 4)
         {
             //Console.WriteLine("Feature 4");
-            //CreateCustomerOrder(); //Calling CreateCustomerOrder() method when option is 4
+            CreateCustomerOrder(); //Calling CreateCustomerOrder() method when option is 4
         }
         else if (option == 5)
         {
