@@ -29,7 +29,12 @@ namespace PRG2_Assignment
 
         public override string ToString()
         {
-            return Type;
+            string flavours = "";
+            for (int i = 0; i < Quantity; i++)
+            {
+                flavours += Type + " + ";
+            }
+            return flavours;
         }
     }
 }

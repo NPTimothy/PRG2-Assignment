@@ -23,50 +23,97 @@ namespace PRG2_Assignment
     {
         public Cup() { }
         public Cup(string o, int s, List<Flavour> f, List<Topping> t) : base(o, s, f, t) { }
-        public override double CalculatePrice()
+
+        public override double CalculatePrice(List<List<string>> flavourList, List<List<string>> toppingList, List<List<string>> optionList)
         {
-            double price;
-            if (Scoops == 1)
+            double totalPrice = 0.0;
+
+            foreach (var flavourInfo in flavourList)
             {
-                price = 4;
-                
-            }
-            else if (Scoops == 2)
-            {
-                price = 5.50;
-                
-            }
-            else if (Scoops == 3)
-            {
-                price = 6.50; 
-            }
-            else
-            {
-                Console.WriteLine("You can only scoop a maximum of 3 scoops.");
-                return 0;
+                string flavourName = flavourInfo[0];
+                double flavourPrice = Convert.ToDouble(flavourInfo[1]);
+
+                foreach (var selectedFlavour in Flavours)
+                    if (flavourName == selectedFlavour.Type)
+                    {
+                        totalPrice += flavourPrice * selectedFlavour.Quantity;
+                    }
             }
 
-            bool hasPremiumFlavour = false;
-            foreach (var flavour in Flavours)
+            // Calculate price based on selected toppings
+            foreach (var toppingInfo in toppingList)
             {
-                if (flavour.Premium)
+                string toppingName = toppingInfo[0];
+                double toppingPrice = Convert.ToDouble(toppingInfo[1]);
+
+                foreach (var selectedTopping in Toppings)
                 {
-                    hasPremiumFlavour = true;
-                    break;
+                    if (toppingName == selectedTopping.Type)
+                    {
+                        totalPrice += toppingPrice;
+                    }
                 }
             }
 
-            if (hasPremiumFlavour)
+            // Calculate price based on selected options
+            foreach (var option in optionList)
             {
-                price += 2 * Scoops;
+                //The option price is in the fifth column of optionList
+                string optionType = option[0];
+                int optionScoops = Convert.ToInt32(option[1]);
+                double optionPrice = Convert.ToDouble(option[4]);
+                if (optionType == Option && optionScoops == Scoops)
+                {
+                    totalPrice += optionPrice;
+                }
+
             }
-            
-            if (Toppings.Count > 0)
-            {
-                price += (1 * Toppings.Count);
-            }
-            return price;
+
+            return totalPrice;
         }
+        /*
+        double price;
+        if (Scoops == 1)
+        {
+            price = 4;
+
+        }
+        else if (Scoops == 2)
+        {
+            price = 5.50;
+
+        }
+        else if (Scoops == 3)
+        {
+            price = 6.50; 
+        }
+        else
+        {
+            Console.WriteLine("You can only scoop a maximum of 3 scoops.");
+            return 0;
+        }
+
+        bool hasPremiumFlavour = false;
+        foreach (var flavour in Flavours)
+        {
+            if (flavour.Premium)
+            {
+                hasPremiumFlavour = true;
+                break;
+            }
+        }
+
+        if (hasPremiumFlavour)
+        {
+            price += 2 * Scoops;
+        }
+
+        if (Toppings.Count > 0)
+        {
+            price += (1 * Toppings.Count);
+        }
+        return price;*/
+    
         public override string ToString()
         {
             string flavours = "";
@@ -80,7 +127,7 @@ namespace PRG2_Assignment
             {
                 toppings += topping.ToString();
             }
-            return "Option: " + Option + "|" + " Scoops: " + Scoops + "|" + " Flavours: " + flavours + "|" + " Toppings: " + toppings;
+            return base.ToString();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace PRG2_Assignment
             Toppings = t;
         }
 
-        public abstract double CalculatePrice();
+        public abstract double CalculatePrice(List<List<string>> flavourList, List<List<string>> toppingList, List<List<string>> optionList);
 
         public override string ToString()
         {
@@ -50,7 +50,7 @@ namespace PRG2_Assignment
             {
                 toppings += topping.ToString();
             }
-            return "Option: " + Option + "|" + " Scoops: " + Scoops + "|" + " Flavours: " + flavours + "|" + " Toppings: " + toppings;
+            return "Option: " + Option + " | Scoops: " + Scoops + " | Flavours: " + flavours + " | Toppings: " + toppings;
         }
     }
 }

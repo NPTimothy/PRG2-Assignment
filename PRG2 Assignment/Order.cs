@@ -35,13 +35,13 @@ namespace PRG2_Assignment
             // Ice cream to modify
             //IceCream modify = IceCreamList[index];
 
-            if (option == "Waffle")
+            if (option.ToLower() == "waffle")
             {
                 IceCreamList[index] = new Waffle(option, scoops, flavours, toppings, waffleFlavour);
-            } else if (option == "Cone")
+            } else if (option.ToLower() == "cone")
             {
                 IceCreamList[index] = new Cone(option, scoops, flavours, toppings, dipped);
-            } else if (option == "Cup")
+            } else if (option.ToLower() == "cup")
             {
                 IceCreamList[index] = new Cup(option, scoops, flavours, toppings);
             }
@@ -59,12 +59,12 @@ namespace PRG2_Assignment
             IceCreamList.RemoveAt(index);
         }
 
-        public double CalculateTotal()
+        public double CalculateTotal(List<List<string>> flavourList, List<List<string>> toppingList, List<List<string>> optionList)
         {
             double total = 0;
             foreach(IceCream iceCream in IceCreamList)
             {
-                total += iceCream.CalculatePrice();
+                total += iceCream.CalculatePrice(flavourList,toppingList, optionList);
             }
             return total;
         }

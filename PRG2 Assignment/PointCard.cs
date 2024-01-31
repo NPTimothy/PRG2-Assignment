@@ -41,7 +41,7 @@ namespace PRG2_Assignment
             PunchCard++;
             if (PunchCard >= 11)
             {
-                PunchCard = 0;
+                PunchCard = 10;
             }
         }
 
