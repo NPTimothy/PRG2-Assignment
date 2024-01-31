@@ -33,7 +33,6 @@ namespace PRG2_Assignment
         public void ModifyIceCream(int index, string option, int scoops, bool dipped, string waffleFlavour, List<Flavour> flavours, List<Topping> toppings)
         {   
             // Ice cream to modify
-            //IceCream modify = IceCreamList[index];
 
             if (option.ToLower() == "waffle")
             {
